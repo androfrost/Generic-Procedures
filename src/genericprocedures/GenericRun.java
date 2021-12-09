@@ -44,6 +44,8 @@ public class GenericRun {
 		testArrayList.get(10).add("Baseballq");
 		testArrayList.add(new ArrayList<String>());
 		testArrayList.get(11).add("Baseballg");
+		testArrayList.add(new ArrayList<String>());
+		testArrayList.get(12).add("Baseg");
 		
 		testArrayList = Sort.arrayListAsciiSort(testArrayList,0);
 		for (int xa = 0; xa < testArrayList.size(); xa++) {
