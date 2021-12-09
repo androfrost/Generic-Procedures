@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class Sort {
 	
 	/*
-	Sorting for a one-dimensional ArrayList <String> based on ascii values of characters in the string
+	Bubble sorting for a two-dimensional ArrayList <String> based on ascii values of characters in the string
 	tcArrayList	- ArrayList passed to be sorted
 	tiCol		- Column to be sorted on, should contain numeric values in String format
 	 */
@@ -24,43 +24,49 @@ public class Sort {
     	if (lcArrayList.isEmpty())
     		return lcArrayList;
     	
+    	// Converts each string into an ArrayList of the ascii values of each character in the given String
     	for (int iRow = 0; iRow < lcArrayList.size(); iRow++) {
-    		lnAscii.add(new ArrayList<Integer>());
+    		lnAscii.add(new ArrayList<Integer>());		// Add a Row of the ArrayList for the ascii values
     		for (int iCol = 0; iCol < lcArrayList.get(iRow).get(tiCol).length(); iCol++) {
     			testString = lcArrayList.get(iRow).get(tiCol);
     			testChar = testString.charAt(iCol);
-    			lnAscii.get(iRow).add(iCol, Ascii.asciiCharValue(testChar));
+    			lnAscii.get(iRow).add(iCol, Ascii.asciiCharValue(testChar));	// Add ascii value to the ArrayList
     		}
     	}
     	
-    	for (int iRow = 0; iRow < tcArrayList.size(); iRow++) {
+    	// Add all needed rows to the sorted ArrayList at the size of the given ArrayList to sort
+    	for (int iRow = 0; iRow < lcArrayList.size(); iRow++) {
     		lcSortArrayList.add(new ArrayList<String>());
     	}
     	
     	int lnSizeA, lnSizeB, lnShortest;
     	int lnAsciiA, lnAsciiB, lnAsciiHighRow = 0;
     	while(isLineSort) {	
+    		// Scan through all records of the ArrayList of ascii characters
     		for (int iRowPass = 0; iRowPass < lnAscii.size() - 1; iRowPass++) {
     			isLineSort = false;
     			lnSizeA = lnAscii.get(iRowPass).size();
     			lnSizeB = lnAscii.get(iRowPass+1).size();
+    			// Determine which of two given ArrayList of ascii characters is shortest, this will help determine order
     			if (lnSizeA <= lnSizeB) {
     				lnShortest = lnSizeA;
     			} else {
     				lnShortest = lnSizeB;
     			}
     			
-    			int liStartArrraySize = lnAscii.size();
-    			int liSetArrayLocation = liStartArrraySize-1, iRowPassTest = iRowPass+1;
-    			for (int iColPass = 0; iColPass < liStartArrraySize; iColPass++) {
+    			int liStartArraySize 	= lnAscii.size();
+    			int liSetArrayLocation 	= liStartArraySize-1;
+    			int iRowPassTest 		= iRowPass+1;
+    			for (int iColPass = 0; iColPass < liStartArraySize; iColPass++) {
     				
+    				// Start Run of Bubble Sort recursive loop to see which word goes first in ascii sort
     				int nSize = lnAscii.size()-1;
     				for (int testx = 0; testx < nSize; testx++) {
     					iRowPass = bubbleSortLoop (lnAscii, iRowPass, iRowPassTest, 0, lnShortest);
     					iRowPassTest = iRowPassTest + 1;
     				}
     				
-
+    				// Add Sorted ArrayLists to sorted ArrayList and remove those from ArrayLists so they do not get tested again
     				if (liSetArrayLocation >= 0) { 
     					lcSortArrayList.get(liSetArrayLocation).add(lcArrayList.get(iRowPass).get(0));
     					lcArrayList.remove(iRowPass);
@@ -80,6 +86,10 @@ public class Sort {
     	return lcArrayList;
     }
 	
+	/*
+	 * Bubble sort for two-dimensional ArrayList
+	 * tiArrayToSort -  ArrayList passed to be sorted
+	 */
 	public static int bubbleSortLoop (ArrayList<ArrayList<Integer>> tiArrayToSort, int tiRowA, int tiRowB, int tiColumn, int tiShortest) {
 		int lnSizeA = tiArrayToSort.get(tiRowA).size(), lnSizeB = tiArrayToSort.get(tiRowB).size();
 		int liRowNext, liColumnNext;
@@ -179,6 +189,10 @@ public class Sort {
 		return lcReturnList;
 	}
 	
+	/*
+	 * Sorts an array of Strings
+	 * tcaArrayToSort	- Array of Strings that will be sorted
+	 */
 	public static String [] sortArray (String [] tcaArrayToSort){
 		String [] lcaArrayToSort = tcaArrayToSort;
 		Arrays.sort(lcaArrayToSort);
@@ -186,6 +200,10 @@ public class Sort {
 		return tcaArrayToSort;
 	}
 	
+	/*
+	 * Sorts an array of integers
+	 * tnaArrayToSort	- Array of Integers that will be sorted
+	 */
 	public static int [] sortArray (int [] tnaArrayToSort){
 		int [] lnaArrayToSort = tnaArrayToSort;
 		Arrays.sort(lnaArrayToSort);
