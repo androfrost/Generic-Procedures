@@ -18,6 +18,7 @@ public class ID {
 		
 	}
 	
+	// Constructor to set up ID file information
 	public ID (String tcIDPath, String tcIDFile, String tcIDExt, String tcIDStartLine) throws Exception{
 		lcIDPath = tcIDPath;
 		lcIDFile = tcIDFile;
@@ -32,6 +33,8 @@ public class ID {
 		} 
 	}
 	
+	// Receives current ID and returns the next ID that is one higher than the last
+	// tiPreviousID		- Previous ID to determine next ID value
 	public static int nextID(int tiPreviousID) {
 		int liNextID = 0;
 		
@@ -40,6 +43,10 @@ public class ID {
 		return liNextID;
 	}
 	
+	// Determines the next ID from the processed file in the ArrayList and updates it to the file
+	// tasIDArray		- ArrayList holding records where the given Column will hold the ID value
+	// tiIDRow			- Number designating the existing row where you will be adding the ID value to
+	// tiIDColumn		- Number designating the column where the ID will be updated to.
 	public static ArrayList<ArrayList<String>> nextIDUpdate (ArrayList<ArrayList<String>> tasIDArray, int tiIDRow, int tiIDColumn) throws Exception {
 		ArrayList<ArrayList<String>> lasReturn = new ArrayList<ArrayList<String>>();
 		lasReturn = tasIDArray;
@@ -75,6 +82,7 @@ public class ID {
 		return lcNewID;
 	}
 	
+	// Setup an ID file based on basic information given from passed variables
 	public void setupIDFile (String tcIDPath, String tcIDFile, String tcIDExt, String tcIDStartLine) throws Exception {
 		
 		String lcIDFileComplete = tcIDPath+tcIDFile+tcIDExt;
