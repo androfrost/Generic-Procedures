@@ -21,7 +21,26 @@ public class EncryptFile {
 		asciiEncryptFileGeneration(lcFileToEncrypt, tlIsDecrypt, tnaSkeleton);
 	}
 	
+	public static void asciiEncryptFile(String lcFileToEncrypt, boolean tlIsDecrypt, int[][] tnaSkeleton) throws Exception {
+		asciiEncryptFileGeneration(lcFileToEncrypt, tlIsDecrypt, tnaSkeleton);
+	}
+	
 	public static void asciiEncryptFileGeneration(String lcFileToEncrypt, boolean tlIsDecrypt, int[] tnaSkeleton) throws Exception {
+		ArrayList<ArrayList<String>> importedFile = new ArrayList<ArrayList<String>> ();
+		
+		importedFile = delimitedFileProcessor.delimitedFileReader(lcFileToEncrypt, ",", "\"");
+		
+		if (tlIsDecrypt == false) {
+			importedFile = Sort.arrayListAsciiSort(importedFile, 0);
+			importedFile = Encryption.asciiEncryption(importedFile, tnaSkeleton);
+		} else {
+			importedFile = Encryption.asciiDecryption(importedFile, tnaSkeleton);
+		}
+		
+		delimitedFileProcessor.delimitedFileWriter("c:/GUIBuilder/_test.csv", importedFile, ",", "\"");
+	}
+	
+	public static void asciiEncryptFileGeneration(String lcFileToEncrypt, boolean tlIsDecrypt, int[][] tnaSkeleton) throws Exception {
 		ArrayList<ArrayList<String>> importedFile = new ArrayList<ArrayList<String>> ();
 		
 		importedFile = delimitedFileProcessor.delimitedFileReader(lcFileToEncrypt, ",", "\"");
