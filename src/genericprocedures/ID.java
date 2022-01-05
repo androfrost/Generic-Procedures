@@ -8,17 +8,21 @@ import fileprocessor.delimitedFileProcessor;
 
 public class ID {
 	
-	static String lcIDPath;
-	static String lcIDFile;
-	static String lcIDExt;
-	String lcIDStartLine;
-	public static ArrayList<ArrayList<String>> lacIDFile = new ArrayList<ArrayList<String>>();
+	private static String lcIDPath;
+	private static String lcIDFile;
+	private static String lcIDExt;
+	private static String lcIDStartLine;
+	private static ArrayList<ArrayList<String>> lacIDFile = new ArrayList<ArrayList<String>>();
 	
 	public ID() {
 		
 	}
 	
 	// Constructor to set up ID file information
+	// tcIDPath			- Path of ID file
+	// tcIDFile 		- ID file name
+	// tcIDExt 			- ID file extension
+	// tcIDStartLine 	- Start Line to setup fields of the ID file
 	public ID (String tcIDPath, String tcIDFile, String tcIDExt, String tcIDStartLine) throws Exception{
 		lcIDPath = tcIDPath;
 		lcIDFile = tcIDFile;
@@ -35,27 +39,39 @@ public class ID {
 	
 	// Receives current ID and returns the next ID that is one higher than the last
 	// tiPreviousID		- Previous ID to determine next ID value
-	public static int nextID(int tiPreviousID) {
+	// tiAddition		- Amount to add to the Previous ID value to get the new ID
+	public static int nextID(int tiPreviousID, int tiAddition) {
 		int liNextID = 0;
 		
-		liNextID = tiPreviousID + 1;
+		liNextID = tiPreviousID + tiAddition;
 		
 		return liNextID;
 	}
+	
+	public static int nextIDStandard(int tiPreviousID) {
+		int liNextID = 0;
+		int liPreviousID = tiPreviousID;
+		
+		liNextID = nextID(liPreviousID, 1);
+		
+		return liNextID;
+	}
+	
 	
 	// Determines the next ID from the processed file in the ArrayList and updates it to the file
 	// tasIDArray		- ArrayList holding records where the given Column will hold the ID value
 	// tiIDRow			- Number designating the existing row where you will be adding the ID value to
 	// tiIDColumn		- Number designating the column where the ID will be updated to.
-	public static ArrayList<ArrayList<String>> nextIDUpdate (ArrayList<ArrayList<String>> tasIDArray, int tiIDRow, int tiIDColumn) throws Exception {
+	public static ArrayList<ArrayList<String>> nextIDUpdate (ArrayList<ArrayList<String>> tasIDArray, int tiIDRow, int tiIDColumn, int tiAddition) throws Exception {
 		ArrayList<ArrayList<String>> lasReturn = new ArrayList<ArrayList<String>>();
 		lasReturn = tasIDArray;
 		int liIDColumn = tiIDColumn;
+		int liAddition = tiAddition;
 		int liNextID;
 		String lcNextID;
 		String lcIDFileComplete = lcIDPath+lcIDFile+lcIDExt;
 		
-		liNextID = nextID(Integer.parseInt(tasIDArray.get(tiIDRow).get(tiIDColumn)));
+		liNextID = nextID(Integer.parseInt(tasIDArray.get(tiIDRow).get(liIDColumn)), liAddition);
 		lcNextID = String.valueOf(liNextID);
 		
 		lasReturn.get(tiIDRow).set(tiIDColumn, String.valueOf(lcNextID));
@@ -68,12 +84,14 @@ public class ID {
 	public static ArrayList<ArrayList<String>> nextIDUpdateStandard (ArrayList<ArrayList<String>> tasIDArray, int tiIDColumn) throws Exception {
 		ArrayList<ArrayList<String>> lasReturn = new ArrayList<ArrayList<String>>();
 		
-		lasReturn = nextIDUpdate(tasIDArray, 1, tiIDColumn);
+		lasReturn = nextIDUpdate(tasIDArray, 1, tiIDColumn, 1);
 		
 		return lasReturn;
 	}
 	
-	public static String updateID (int tiIDColumn) throws Exception {
+	// Updates the ID in the ID tracking file using the standard update of plus 1 in the second row always
+	// tiIDColumn		- Column where to update the ID value
+	public static String updateIDTrackingFile (int tiIDColumn) throws Exception {
 		String lcNewID = "0";
 		
 		lcNewID = lacIDFile.get(1).get(tiIDColumn);
@@ -82,8 +100,16 @@ public class ID {
 		return lcNewID;
 	}
 	
-	// Setup an ID file based on basic information given from passed variables
+	// Setup an ID tracking file based on basic information given from passed variables
+	// tcIDPath	- 		Path of ID file
+	// tcIDFile -		ID file name
+	// tcIDExt - 		ID file extension
+	// tcIDStartLine - 	Start Line to setup fields of the ID file
 	public void setupIDFile (String tcIDPath, String tcIDFile, String tcIDExt, String tcIDStartLine) throws Exception {
+		
+		setIDPath(tcIDPath);
+		setIDFile(tcIDFile);
+		setIDExt(tcIDExt);
 		
 		String lcIDFileComplete = tcIDPath+tcIDFile+tcIDExt;
 		ArrayList<ArrayList<String>> lasID = new ArrayList<ArrayList<String>>();
@@ -124,10 +150,33 @@ public class ID {
 	// Calls setArrayList to update the ArrayList holding the IDs
 	public static String getIDUpdate(ArrayList<ArrayList<String>> tasGivenIDArray, int tiIDColumn) throws Exception {
 		
-		String lcIDReturn;
+		String lcIDReturn = "-1";
 		lcIDReturn = getID(tasGivenIDArray, 1, tiIDColumn);
 		tasGivenIDArray = nextIDUpdateStandard(tasGivenIDArray, tiIDColumn);
 		setIDArrayList(tasGivenIDArray);
+		
+		return lcIDReturn;
+	}
+	
+	// Updates the ID based off the field column number
+	public String getIDUpdate (int tiIDColumn) throws Exception {
+		String lcIDReturn = "-1";
+		int liIDColumn = tiIDColumn;
+		
+		if (liIDColumn > 0)
+			lcIDReturn = getIDUpdate(lacIDFile, liIDColumn);
+		
+		return lcIDReturn;
+	}
+	
+	// Updates the ID based off the field name
+	public String getIDUpdate (String tcFieldToFind) throws Exception {
+		String lcIDReturn 		= "-1";
+		String lcFieldToFind 	= tcFieldToFind;
+		int lcColumn;
+		
+		lcColumn = Search.searchArrayList(lacIDFile.get(0), lcFieldToFind);
+		lcIDReturn = getIDUpdate(lcColumn);
 		
 		return lcIDReturn;
 	}
@@ -136,5 +185,15 @@ public class ID {
 	public static void setIDArrayList(ArrayList<ArrayList<String>> tasGivenIDArray){
 		
 		lacIDFile = tasGivenIDArray;
+	}
+	
+	public static void setIDPath(String tcIDPath) {
+		lcIDPath = tcIDPath;
+	}
+	public static void setIDFile(String tcIDFile) {
+		lcIDFile = tcIDFile;
+	}
+	public static void setIDExt(String tcIDExt) {
+		lcIDExt = tcIDExt;
 	}
 }
