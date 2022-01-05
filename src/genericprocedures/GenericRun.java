@@ -78,6 +78,11 @@ public class GenericRun {
 	public static void setupIDTestFile() throws Exception {
 		
 		testID.setupIDFile("c:/test/", "IDTest", ".csv", "ID1,ID2,ID3,ID4");
+		testID.getIDUpdate(1);
+		testID.getIDUpdate(2);
+		testID.getIDUpdate(2);
+		testID.getIDUpdate("ID4");
+		testID.getIDUpdate("ID5");
 		
 	}
 	
