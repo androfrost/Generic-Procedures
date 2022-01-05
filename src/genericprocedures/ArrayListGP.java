@@ -2,14 +2,14 @@ package genericprocedures;
 
 import java.util.ArrayList;
 
+//import org.graalvm.compiler.nodes.java.ArrayLengthNode;
+
 import fileprocessor.delimitedFileProcessor;
 
 public class ArrayListGP {
 
 	public static String[] dropDownAL(String tcDropDownPathFile, int tiSelectedIndex, int tiLoadID) throws Exception {
-		//ArrayList<ArrayList<String>> tsArrayList,
-		//int liDropDownIndex = Integer.valueOf(tsArrayList.get(tiSelectedIndex).get(2));
-	
+
 		ArrayList<ArrayList<String>> importedDropDown = delimitedFileProcessor.delimitedFileReader(tcDropDownPathFile, ",", "\"");
 		String[] lcTempDropList = new String[importedDropDown.get(tiLoadID).size() - 1];
 		String[] lcDropList;
@@ -33,7 +33,7 @@ public class ArrayListGP {
 	}
 	
 	public static String[] displayLinesALStandard(String tcDisplayPathFile, int[] tiLoadID) throws Exception {
-		String[] lcDisplayList = new String[1]; 
+		String[] lcDisplayList;		// = new String[1]; 
 		
 		lcDisplayList = displayLinesAL(tcDisplayPathFile, tiLoadID, 1);
 		
@@ -57,7 +57,27 @@ public class ArrayListGP {
 				}
 		}
 		
-		
 		return lcDisplayList;
+	}
+	
+	public static ArrayList<ArrayList<String>> appendTwoALIncreaseID (ArrayList<ArrayList<String>> satFirst, ArrayList<ArrayList<String>> satSecond, int[] naIDList){
+		ArrayList<ArrayList<String>> salCombined 	= satFirst;	// Set start of combine to first passed array
+		ArrayList<ArrayList<String>> salSecond 		= satSecond;
+		int lnIDArrayLength 						= naIDList.length;
+		int lnCombinedALLength 						= salCombined.size();
+		int lnSecondALLength 						= salSecond.size();
+	
+		for (int ALx = 0; ALx < lnSecondALLength; ALx++) {
+			
+			for (int aIDx = 0; aIDx < lnIDArrayLength; aIDx++) {
+				String lcTestString = salSecond.get(ALx).get(aIDx);
+				if (!lcTestString.trim().isEmpty())
+					salSecond.get(ALx).set(aIDx,  salSecond.get(ALx).get(aIDx) + lnCombinedALLength);
+			}
+		}
+		
+		salCombined.addAll(salSecond);
+		
+		return salCombined;
 	}
 }
