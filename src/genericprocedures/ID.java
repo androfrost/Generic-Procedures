@@ -8,9 +8,9 @@ import fileprocessor.delimitedFileProcessor;
 
 public class ID {
 	
-	private static String lcIDPath;
+	private static String lcIDPath			= "C:/JavaProjectData/ID/";
 	private static String lcIDFile;
-	private static String lcIDExt;
+	private static String lcIDExt			= ".csv";
 	private static String lcIDStartLine;
 	private static ArrayList<ArrayList<String>> lacIDFile = new ArrayList<ArrayList<String>>();
 	
