@@ -21,7 +21,7 @@ public class Sort {
     	char testChar;
     	boolean isLineSort = true;
     	
-    	if (lcArrayList.isEmpty())
+    	if (lcArrayList.isEmpty() || lcArrayList.size() == 1)
     		return lcArrayList;
     	
     	// Converts each string into an ArrayList of the ascii values of each character in the given String
@@ -40,7 +40,6 @@ public class Sort {
     	}
     	
     	int lnSizeA, lnSizeB, lnShortest;
-    	int lnAsciiA, lnAsciiB, lnAsciiHighRow = 0;
     	while(isLineSort) {	
     		// Scan through all records of the ArrayList of ascii characters
     		for (int iRowPass = 0; iRowPass < lnAscii.size() - 1; iRowPass++) {
