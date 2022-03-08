@@ -9,10 +9,14 @@ public class GenericRun {
 	public static void main(String[] args) throws Exception {
 		int[] testArray = Ascii.asciiStringValue("123456789abczABCZ");
 		for (int xa = 0; xa < testArray.length; xa++) {
-		//	System.out.println(testArray[xa]);
+			
 		}
 		
-		int[] testArray2 = Ascii.asciiStringValue("16zA789a2345bcBCZ");
+		int[] testArrayInt2 = Ascii.asciiStringValue("16zA789a2345bcBCZ");
+		Integer[] testArray2 = new Integer[testArrayInt2.length];
+		for (int xa = 0; xa < testArray.length; xa++) {
+			testArray2[xa] = Integer.valueOf(testArrayInt2[xa]);
+		}
 		testArray2 = Sort.sortArray(testArray2);
 		for (int xa = 0; xa < testArray2.length; xa++) {
 			System.out.println(testArray2[xa]);
@@ -62,12 +66,28 @@ public class GenericRun {
 		EncryptFile.asciiEncryptFile("c:/GUIBuilder/testGUI.csv",false);
 		EncryptFile.asciiEncryptFile("c:/GUIBuilder/_test.csv",true);
 		
-		int[] nColumnNo = new int[3];
-		nColumnNo[0] = 1;
-		nColumnNo[1] = 0;
+		int[] nColumnNo = new int[5];
+		nColumnNo[0] = 0;
+		nColumnNo[1] = 1;
 		nColumnNo[2] = 2;
-		ArrayListGP.displayLinesALStandard("C:/ImportFiles/exportcsv3.csv", nColumnNo);
-		ArrayListGP.displayLinesAL("C:/ImportFiles/exportcsv3.csv", nColumnNo,0);
+		nColumnNo[3] = 3;
+		nColumnNo[4] = 1;
+		
+		// Test different lengths and size limit sorts
+		insertionSortTest(10, 10);
+		insertionSortTest(100, 100);
+		insertionSortTest(1000, 1000);
+		
+		System.out.println("displayLinesALStandard");
+		String[] standard = ArrayListGP.displayLinesALStandard("C:/ImportFiles/exportcsv3.csv", nColumnNo);
+		for (int x = 0; x < standard.length; x++) {
+			System.out.println(standard[x]);
+		}			
+		System.out.println("\n"+"displayLinesAL");
+		String[] nonStandard = ArrayListGP.displayLinesAL("C:/ImportFiles/exportcsv3.csv", nColumnNo,0,6);
+		for (int x = 0; x < nonStandard.length; x++) {
+			System.out.println(nonStandard[x]);
+		}	
 		
 		setupIDTestFile();
 		
@@ -95,5 +115,18 @@ public class GenericRun {
 		
 		double clength = MathCalc.pythagorian(12,16);
 		System.out.println(clength);
+	}
+	
+	// Call insert sort algorithm with a random group of numbers
+	public static void insertionSortTest(int tArrayLen, int randomNumberSizeLimit) {
+		int arrayLen = tArrayLen;
+		ArrayList<Integer> arrayToSort = new ArrayList<Integer>();
+		for (int arrLoc = 0; arrLoc < arrayLen; arrLoc++) {
+			arrayToSort.add((int) (Math.random()*(randomNumberSizeLimit-1)));
+		}
+		
+		ArrayList<Integer> arraySorted = Sort.sortArrayInsertion(arrayToSort);
+		
+		System.out.println(arraySorted);
 	}
 }
