@@ -32,29 +32,82 @@ public class ArrayListGP {
 		return lcDropList;
 	}
 	
+	/*
+	 * Calls displayLineAL to set up a display of a file with default start row and end row
+	 * tcDisplayPathFile		- File to have value displayed
+	 * tiLoadID					- The order to display the fields in file
+	 */
 	public static String[] displayLinesALStandard(String tcDisplayPathFile, int[] tiLoadID) throws Exception {
 		String[] lcDisplayList;		// = new String[1]; 
 		
-		lcDisplayList = displayLinesAL(tcDisplayPathFile, tiLoadID, 1);
+		lcDisplayList = displayLinesAL(tcDisplayPathFile, tiLoadID, 1, -1);
 		
 		return lcDisplayList;
-	}	
+	}
 	
-	public static String[] displayLinesAL(String tcDisplayPathFile, int[] tiLoadID, int tiStartRow) throws Exception {
+	/*
+	 * Calls displayLineAL to set up a display of a file with default start row and end row
+	 * talImportedDisplayFile	- ArrayList to have value displayed
+	 * tiLoadID					- The order to display the fields in file
+	 */
+	public static String[] displayLinesALStandard(ArrayList<ArrayList<String>> talImportedDisplayFile, int[] tiLoadID) throws Exception {
+		String[] lcDisplayList;
+		
+		lcDisplayList = displayLinesAL(talImportedDisplayFile, tiLoadID, 1, -1);
+		
+		return lcDisplayList;
+	}
+	
+	/*
+	 * Create an Array from a file of the data in a format for displaying on screen
+	 * tcDisplayPathFile	- File to have value displayed
+	 * tiLoadID				- The order to display the fields in file
+	 * tiStartRow			- The row of the file to start displaying the data from
+	 * tiEndRow				- The row of the file to end displaying the data
+	 */
+	public static String[] displayLinesAL(String tcDisplayPathFile, int[] tiLoadID, int tiStartRow, int tiEndRow) throws Exception {
 		ArrayList<ArrayList<String>> importedDisplayFile = delimitedFileProcessor.delimitedFileReader(tcDisplayPathFile, ",", "\"");
-		
 		int liDisplayFileSize 	= importedDisplayFile.size();
-		int liLoadIDLength 		= tiLoadID.length;
+		if (tiEndRow < tiStartRow) {
+			tiEndRow = liDisplayFileSize;
+		}
 		
-		String[] lcDisplayList = new String[liDisplayFileSize-tiStartRow];
-		for (int nDisplayLine = tiStartRow; nDisplayLine < liDisplayFileSize; nDisplayLine++) {
+		String[] lcDisplayList = new String[tiEndRow-tiStartRow];
+		lcDisplayList = displayLinesAL(importedDisplayFile, tiLoadID, 1, -1);
+		
+		return lcDisplayList;
+	}
+	
+	/*
+	 * Create an Array from an ArrayList of the data in a format for displaying on screen
+	 * talImportedDisplayFile	- ArrayList of the values to display
+	 * tiLoadID					- The order to display the fields in file
+	 * tiStartRow				- The row of the file to start displaying the data from
+	 * tiEndRow					- The row of the file to end displaying the data
+	 */
+	public static String[] displayLinesAL(ArrayList<ArrayList<String>> talImportedDisplayFile, int[] tiLoadID, int tiStartRow, int tiEndRow) throws Exception {
+
+		int liDisplayFileSize 	= talImportedDisplayFile.size();
+		int liLoadIDLength 		= tiLoadID.length;
+		if (tiEndRow < tiStartRow) {
+			tiEndRow = liDisplayFileSize;
+		}
+		
+		String[] lcDisplayList = new String[tiEndRow-tiStartRow];
+		for (int nDisplayLine = tiStartRow; nDisplayLine < tiEndRow; nDisplayLine++) {
 			for (int nload = 0; nload < liLoadIDLength; nload++) {
 				int tiLID = tiLoadID[nload];
-				if (lcDisplayList[nDisplayLine-tiStartRow] == null)
-					lcDisplayList[nDisplayLine-tiStartRow] = importedDisplayFile.get(nDisplayLine).get(tiLID);
-				else
-					lcDisplayList[nDisplayLine-tiStartRow] = lcDisplayList[nDisplayLine-tiStartRow] + " " + importedDisplayFile.get(nDisplayLine).get(tiLID);
+				int longStringLen = longestArrayListStringLength(talImportedDisplayFile,tiLID);
+				if (nload < talImportedDisplayFile.get(nDisplayLine).size()) {
+					if (lcDisplayList[nDisplayLine-tiStartRow] == null)
+						lcDisplayList[nDisplayLine-tiStartRow] = StringHandling.padr(talImportedDisplayFile.get(nDisplayLine).get(tiLID),longStringLen," ");
+					else
+						lcDisplayList[nDisplayLine-tiStartRow] = lcDisplayList[nDisplayLine-tiStartRow] + " " + StringHandling.padr(talImportedDisplayFile.get(nDisplayLine).get(tiLID),longStringLen," ");
+				} else 
+				{
+					lcDisplayList[nDisplayLine-tiStartRow] = lcDisplayList[nDisplayLine-tiStartRow] + " " + StringHandling.padr("",longStringLen," ");
 				}
+			}
 		}
 		
 		return lcDisplayList;
@@ -79,5 +132,30 @@ public class ArrayListGP {
 		salCombined.addAll(salSecond);
 		
 		return salCombined;
+	}
+	
+	public static int longestArrayListStringLength (ArrayList<ArrayList<String>> salScanArrayList, int tnColumn) {
+		int lcStringLength = 0;
+		
+		lcStringLength = longestArrayListStringLength(salScanArrayList, tnColumn, 1);
+		
+		return lcStringLength;
+	}
+	
+	public static int longestArrayListStringLength (ArrayList<ArrayList<String>> salScanArrayList, int tnColumn, int startRow) {
+		int lcStringLength = 0;
+		int arrayStringLength = 0;
+		
+		for (int x = startRow; x < salScanArrayList.size(); x++) {
+			if (salScanArrayList.get(x).size() > startRow) {
+				arrayStringLength = salScanArrayList.get(x).get(tnColumn).trim().length();
+				if (lcStringLength < arrayStringLength) {
+					lcStringLength = arrayStringLength;
+				}
+			}
+		}
+		
+		return lcStringLength;
+		
 	}
 }
