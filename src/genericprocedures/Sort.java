@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 public class Sort {
 	
@@ -189,9 +190,20 @@ public class Sort {
 	}
 	
 	/*
+	 * Sorts an array of a generic type
+	 * ttaArrayToSort	- Array of Generic Type variables that will be sorted
+	 */
+	public static <T> T[] sortArray (T[] ttaArrayToSort){
+		T [] ltaArrayToSort = ttaArrayToSort;
+		Arrays.sort(ltaArrayToSort);
+		
+		return ttaArrayToSort;
+	}
+	
+	/*
 	 * Sorts an array of Strings
 	 * tcaArrayToSort	- Array of Strings that will be sorted
-	 */
+	*/ 
 	public static String [] sortArray (String [] tcaArrayToSort){
 		String [] lcaArrayToSort = tcaArrayToSort;
 		Arrays.sort(lcaArrayToSort);
@@ -209,4 +221,39 @@ public class Sort {
 		
 		return lnaArrayToSort;
 	}
+	
+	/*
+	 * Sorts an array of integers using insertion sort
+	 * ttaArrayToSort	- Array of Integers that will be sorted
+	 */
+	public static ArrayList<Integer> sortArrayInsertion (ArrayList<Integer> ttaArrayToSort) {
+		ArrayList<Integer> ltaArrayToSort = ttaArrayToSort;
+		ArrayList<Integer> lSortedArrayList = new ArrayList<Integer>();
+		ArrayList<Integer> lBeforeArrayList = new ArrayList<Integer>();
+		ArrayList<Integer> lAfterArrayList = new ArrayList<Integer>();
+		int arrayLen = ltaArrayToSort.size();
+		int randomValue = (int) (Math.random()*(arrayLen-1));
+
+		for (int walkArrayNo = 0; walkArrayNo < arrayLen; walkArrayNo++) {
+			if (walkArrayNo != randomValue) {
+				if (ltaArrayToSort.get(walkArrayNo) <= ltaArrayToSort.get(randomValue)) {
+					lBeforeArrayList.add(ltaArrayToSort.get(walkArrayNo));
+				} else {
+					lAfterArrayList.add(ltaArrayToSort.get(walkArrayNo));
+				}
+			}
+		}
+		if (arrayLen > 0) {
+			lSortedArrayList.add(ltaArrayToSort.get(randomValue));
+			
+			lBeforeArrayList = sortArrayInsertion(lBeforeArrayList);
+			lAfterArrayList = sortArrayInsertion(lAfterArrayList);
+			lBeforeArrayList.addAll(lSortedArrayList);
+			lSortedArrayList = lBeforeArrayList;
+			lSortedArrayList.addAll(lAfterArrayList);
+		}
+		
+		return lSortedArrayList;
+	}
+	
 }
