@@ -37,7 +37,7 @@ public class ArrayListGP {
 	 * tcDisplayPathFile		- File to have value displayed
 	 * tiLoadID					- The order to display the fields in file
 	 */
-	public static String[] displayLinesALStandard(String tcDisplayPathFile, int[] tiLoadID) throws Exception {
+	public static String[] displayLinesAL(String tcDisplayPathFile, int[] tiLoadID) throws Exception {
 		String[] lcDisplayList;		// = new String[1]; 
 		
 		lcDisplayList = displayLinesAL(tcDisplayPathFile, tiLoadID, 1, -1);
@@ -50,7 +50,7 @@ public class ArrayListGP {
 	 * talImportedDisplayFile	- ArrayList to have value displayed
 	 * tiLoadID					- The order to display the fields in file
 	 */
-	public static String[] displayLinesALStandard(ArrayList<ArrayList<String>> talImportedDisplayFile, int[] tiLoadID) throws Exception {
+	public static String[] displayLinesAL(ArrayList<ArrayList<String>> talImportedDisplayFile, int[] tiLoadID) throws Exception {
 		String[] lcDisplayList;
 		
 		lcDisplayList = displayLinesAL(talImportedDisplayFile, tiLoadID, 1, -1);
