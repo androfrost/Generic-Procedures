@@ -74,12 +74,12 @@ public class GenericRun {
 		nColumnNo[4] = 1;
 		
 		// Test different lengths and size limit sorts
-		insertionSortTest(10, 10);
-		insertionSortTest(100, 100);
+		insertionSortTest(10, 10000);
+		insertionSortTest(50, 100);
 		insertionSortTest(1000, 1000);
 		
 		System.out.println("displayLinesALStandard");
-		String[] standard = ArrayListGP.displayLinesALStandard("C:/ImportFiles/exportcsv3.csv", nColumnNo);
+		String[] standard = ArrayListGP.displayLinesAL("C:/ImportFiles/exportcsv3.csv", nColumnNo);
 		for (int x = 0; x < standard.length; x++) {
 			System.out.println(standard[x]);
 		}			
@@ -122,8 +122,10 @@ public class GenericRun {
 		int arrayLen = tArrayLen;
 		ArrayList<Integer> arrayToSort = new ArrayList<Integer>();
 		for (int arrLoc = 0; arrLoc < arrayLen; arrLoc++) {
-			arrayToSort.add((int) (Math.random()*(randomNumberSizeLimit-1)));
+			arrayToSort.add((int) (Math.random()*(randomNumberSizeLimit)));
 		}
+		
+		System.out.println(arrayToSort);
 		
 		ArrayList<Integer> arraySorted = Sort.sortArrayInsertion(arrayToSort);
 		
